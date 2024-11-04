@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
 import authenticateToken from "../middlewares/tokenAuthentication";
-import { getTaskList, addTask, deleteTask, updateTask } from "../controllers";
+import { getTaskArray, addTask, deleteTask, updateTask } from "../controllers";
 
 const router = Router();
 
-router.get("/get-list", authenticateToken, getTaskList);
+router.get("/get-list", authenticateToken, getTaskArray);
 
 router.post("/add-task", authenticateToken, addTask);
 

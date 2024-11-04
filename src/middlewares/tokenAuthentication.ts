@@ -7,14 +7,17 @@ import catchResponse from "../utils/catchResponse";
 
 const jwtSecretKey = process.env.JWT_SECRET as string;
 
+interface authReq extends Request {
+  user?: IUserAuthData;
+}
+
 const authenticateToken = async (
-  req: Request,
+  req: authReq,
   res: Response,
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
-
   try {
     if (!token) throw { statusCode: 401, message: "Token missing" };
     else {
@@ -23,8 +26,10 @@ const authenticateToken = async (
       else {
         const userObj = await verifyUserExistance(user._id);
 
-        if (userObj?.username === user.username) next();
-        else throw { statusCode: 401, message: "Invalid token" };
+        if (userObj?.username === user.username) {
+          req.user = user;
+          next();
+        } else throw { statusCode: 401, message: "Invalid token" };
       }
     }
   } catch (error) {
