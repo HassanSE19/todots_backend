@@ -2,13 +2,9 @@ import { Request, Response, Router } from "express";
 
 import { authenticateUser, createUser } from "../controllers";
 import authenticateToken from "../middlewares/tokenAuthentication";
-import { IUserAuthData } from "../types";
+import { authReq } from "../types";
 
 const router = Router();
-
-interface authReq extends Request {
-  user?: IUserAuthData;
-}
 
 router.get(
   "/validate-token",
@@ -22,7 +18,7 @@ router.get(
     });
   }
 );
-router.get("/login", authenticateUser);
+router.post("/login", authenticateUser);
 router.post("/signup", createUser);
 
 export default router;

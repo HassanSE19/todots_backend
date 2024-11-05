@@ -1,17 +1,11 @@
 import { Request, Response } from "express";
 import { TodoList } from "../models";
 import catchResponse from "../utils/catchResponse";
+import { authReq } from "../types";
 
-interface ITaskObj {
-  _id?: string;
-  userId: string;
-  desc: string;
-  isCompleted: boolean;
-}
-
-const getTaskArray = async (req: Request, res: Response) => {
+const getTaskArray = async (req: authReq, res: Response) => {
   try {
-    const { userId } = req.query;
+    const userId = req.user?._id;
     const taskArray = await TodoList.find({ userId });
     res.status(200).send({ success: true, taskArray });
   } catch (error) {
@@ -19,9 +13,10 @@ const getTaskArray = async (req: Request, res: Response) => {
   }
 };
 
-const addTask = async (req: Request, res: Response) => {
+const addTask = async (req: authReq, res: Response) => {
   try {
     const { task } = req.body;
+    task.userId = req.user?._id;
     const addedTask = await TodoList.create(task);
 
     if (addedTask) {
@@ -33,9 +28,10 @@ const addTask = async (req: Request, res: Response) => {
   }
 };
 
-const deleteTask = async (req: Request, res: Response) => {
+const deleteTask = async (req: authReq, res: Response) => {
   try {
-    const { _id, userId } = req.query;
+    const { _id } = req.query;
+    const userId = req.user?._id;
     const deleteResponse = await TodoList.deleteOne({ _id });
 
     if (deleteResponse.deletedCount) {
@@ -47,9 +43,10 @@ const deleteTask = async (req: Request, res: Response) => {
   }
 };
 
-const updateTask = async (req: Request, res: Response) => {
+const updateTask = async (req: authReq, res: Response) => {
   try {
-    const { _id, userId, taskData } = { ...req.body };
+    const userId = req.user?._id;
+    const { _id, taskData } = req.body;
     const updateResponse = await TodoList.findOneAndUpdate(
       { _id },
       { ...taskData }

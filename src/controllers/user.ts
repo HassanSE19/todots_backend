@@ -6,7 +6,7 @@ import catchResponse from "../utils/catchResponse";
 const jwtSecretKey = process.env.JWT_SECRET as string;
 
 const signToken = (_id: string, username: string): string => {
-  const token = sign({ _id, username }, jwtSecretKey, { expiresIn: "15d" });
+  const token = sign({ _id, username }, jwtSecretKey, { expiresIn: "1d" });
 
   return token;
 };
@@ -19,7 +19,7 @@ const verifyUserExistance = async (_id: string) => {
 
 const authenticateUser = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.query;
+    const { username, password } = req.body;
     const user = await User.findOne({ username });
 
     if (user && (await user?.comparePassword(password as string)) === true) {

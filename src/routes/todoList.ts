@@ -10,6 +10,6 @@ router.post("/add-task", authenticateToken, addTask);
 
 router.delete("/delete-task", authenticateToken, deleteTask);
 
-router.put("/update-task", authenticateToken, updateTask);
+router.patch("/update-task", authenticateToken, updateTask);
 
 export default router;
