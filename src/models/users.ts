@@ -5,10 +5,12 @@ import { IUser } from "../types";
 const userSchema = new Schema<IUser>({
   username: {
     type: String,
+    minlength: 3,
     required: true,
   },
   password: {
     type: String,
+    minlength: 5,
     required: true,
   },
   createdOn: {

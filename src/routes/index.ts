@@ -5,6 +5,6 @@ import todoListRouter from "./todoList";
 const router = Router();
 
 router.use("/user", userRouter);
-router.use("/todoList", todoListRouter);
+router.use("/todo-list", todoListRouter);
 
 export default router;
